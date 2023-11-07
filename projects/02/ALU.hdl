@@ -40,227 +40,258 @@ CHIP ALU {
         ng;      // (out < 0,  1, 0)
 
     PARTS:
-    Not(in=zx, out=nzx);
-    Not(in=zy, out=nzy);
-    
     // x = 0 if zx = 1
-    And(a=x[0], b=nzx, out=xz0);
-    And(a=x[1], b=nzx, out=xz1);
-    And(a=x[2], b=nzx, out=xz2);
-    And(a=x[3], b=nzx, out=xz3);
-    And(a=x[4], b=nzx, out=xz4);
-    And(a=x[5], b=nzx, out=xz5);
-    And(a=x[6], b=nzx, out=xz6);
-    And(a=x[7], b=nzx, out=xz7);
-    And(a=x[8], b=nzx, out=xz8);
-    And(a=x[9], b=nzx, out=xz9);
-    And(a=x[10], b=nzx, out=xz10);
-    And(a=x[11], b=nzx, out=xz11);
-    And(a=x[12], b=nzx, out=xz12);
-    And(a=x[13], b=nzx, out=xz13);
-    And(a=x[14], b=nzx, out=xz14);
-    And(a=x[15], b=nzx, out=xz15);
+    Mux16(a=x, b=false, sel=zx, out=zzx);
+
+    // !x if nx = 1
+    Not16(in=zzx, out=nzzx);
+    Mux16(a=zzx, b=nzzx, sel=nx, out=xval);
 
     // y = 0 if zy = 1
-    And(a=y[0], b=nzy, out=yz0);
-    And(a=y[1], b=nzy, out=yz1);
-    And(a=y[2], b=nzy, out=yz2);
-    And(a=y[3], b=nzy, out=yz3);
-    And(a=y[4], b=nzy, out=yz4);
-    And(a=y[5], b=nzy, out=yz5);
-    And(a=y[6], b=nzy, out=yz6);
-    And(a=y[7], b=nzy, out=yz7);
-    And(a=y[8], b=nzy, out=yz8);
-    And(a=y[9], b=nzy, out=yz9);
-    And(a=y[10], b=nzy, out=yz10);
-    And(a=y[11], b=nzy, out=yz11);
-    And(a=y[12], b=nzy, out=yz12);
-    And(a=y[13], b=nzy, out=yz13);
-    And(a=y[14], b=nzy, out=yz14);
-    And(a=y[15], b=nzy, out=yz15);
-
-    // !x if nz = 1
-    Xor(a=xz0, b=nx, out=nnx0);
-    Xor(a=xz1, b=nx, out=nnx1);
-    Xor(a=xz2, b=nx, out=nnx2);
-    Xor(a=xz3, b=nx, out=nnx3);
-    Xor(a=xz4, b=nx, out=nnx4);
-    Xor(a=xz5, b=nx, out=nnx5);
-    Xor(a=xz6, b=nx, out=nnx6);
-    Xor(a=xz7, b=nx, out=nnx7);
-    Xor(a=xz8, b=nx, out=nnx8);
-    Xor(a=xz9, b=nx, out=nnx9);
-    Xor(a=xz10, b=nx, out=nnx10);
-    Xor(a=xz11, b=nx, out=nnx11);
-    Xor(a=xz12, b=nx, out=nnx12);
-    Xor(a=xz13, b=nx, out=nnx13);
-    Xor(a=xz14, b=nx, out=nnx14);
-    Xor(a=xz15, b=nx, out=nnx15);
+    Mux16(a=y, b=false, sel=zy, out=zzy);
 
     // !y if ny = 1
-    Xor(a=yz0, b=ny, out=nny0);
-    Xor(a=yz1, b=ny, out=nny1);
-    Xor(a=yz2, b=ny, out=nny2);
-    Xor(a=yz3, b=ny, out=nny3);
-    Xor(a=yz4, b=ny, out=nny4);
-    Xor(a=yz5, b=ny, out=nny5);
-    Xor(a=yz6, b=ny, out=nny6);
-    Xor(a=yz7, b=ny, out=nny7);
-    Xor(a=yz8, b=ny, out=nny8);
-    Xor(a=yz9, b=ny, out=nny9);
-    Xor(a=yz10, b=ny, out=nny10);
-    Xor(a=yz11, b=ny, out=nny11);
-    Xor(a=yz12, b=ny, out=nny12);
-    Xor(a=yz13, b=ny, out=nny13);
-    Xor(a=yz14, b=ny, out=nny14);
-    Xor(a=yz15, b=ny, out=nny15);
-
-    // x + y
-    HalfAdder(a=nnx0, b=nny0, sum=xy0, carry=xyc0);
-    FullAdder(a=nnx1, b=nny1, c=xyc0, sum=xy1, carry=xyc1);
-    FullAdder(a=nnx2, b=nny2, c=xyc1, sum=xy2, carry=xyc2);
-    FullAdder(a=nnx3, b=nny3, c=xyc2, sum=xy3, carry=xyc3);
-    FullAdder(a=nnx4, b=nny4, c=xyc3, sum=xy4, carry=xyc4);
-    FullAdder(a=nnx5, b=nny5, c=xyc4, sum=xy5, carry=xyc5);
-    FullAdder(a=nnx6, b=nny6, c=xyc5, sum=xy6, carry=xyc6);
-    FullAdder(a=nnx7, b=nny7, c=xyc6, sum=xy7, carry=xyc7);
-    FullAdder(a=nnx8, b=nny8, c=xyc7, sum=xy8, carry=xyc8);
-    FullAdder(a=nnx9, b=nny9, c=xyc8, sum=xy9, carry=xyc9);
-    FullAdder(a=nnx10, b=nny10, c=xyc9, sum=xy10, carry=xyc10);
-    FullAdder(a=nnx11, b=nny11, c=xyc10, sum=xy11, carry=xyc11);
-    FullAdder(a=nnx12, b=nny12, c=xyc11, sum=xy12, carry=xyc12);
-    FullAdder(a=nnx13, b=nny13, c=xyc12, sum=xy13, carry=xyc13);
-    FullAdder(a=nnx14, b=nny14, c=xyc13, sum=xy14, carry=xyc14);
-    FullAdder(a=nnx15, b=nny15, c=xyc14, sum=xy15, carry=xyc15);
-
-    // x & y
-    And(a=nnx0, b=nny0, out=xya0);
-    And(a=nnx1, b=nny1, out=xya1);
-    And(a=nnx2, b=nny2, out=xya2);
-    And(a=nnx3, b=nny3, out=xya3);
-    And(a=nnx4, b=nny4, out=xya4);
-    And(a=nnx5, b=nny5, out=xya5);
-    And(a=nnx6, b=nny6, out=xya6);
-    And(a=nnx7, b=nny7, out=xya7);
-    And(a=nnx8, b=nny8, out=xya8);
-    And(a=nnx9, b=nny9, out=xya9);
-    And(a=nnx10, b=nny10, out=xya10);
-    And(a=nnx11, b=nny11, out=xya11);
-    And(a=nnx12, b=nny12, out=xya12);
-    And(a=nnx13, b=nny13, out=xya13);
-    And(a=nnx14, b=nny14, out=xya14);
-    And(a=nnx15, b=nny15, out=xya15);
-
-    Not(in=f, out=nf);
-
-    // x + y if f = 1
-    And(a=xy0, b=f, out=xyf0);
-    And(a=xy1, b=f, out=xyf1);
-    And(a=xy2, b=f, out=xyf2);
-    And(a=xy3, b=f, out=xyf3);
-    And(a=xy4, b=f, out=xyf4);
-    And(a=xy5, b=f, out=xyf5);
-    And(a=xy6, b=f, out=xyf6);
-    And(a=xy7, b=f, out=xyf7);
-    And(a=xy8, b=f, out=xyf8);
-    And(a=xy9, b=f, out=xyf9);
-    And(a=xy10, b=f, out=xyf10);
-    And(a=xy11, b=f, out=xyf11);
-    And(a=xy12, b=f, out=xyf12);
-    And(a=xy13, b=f, out=xyf13);
-    And(a=xy14, b=f, out=xyf14);
-    And(a=xy15, b=f, out=xyf15);
-
-    // x & y if f = 0
-    And(a=xya0, b=nf, out=xynf0);
-    And(a=xya1, b=nf, out=xynf1);
-    And(a=xya2, b=nf, out=xynf2);
-    And(a=xya3, b=nf, out=xynf3);
-    And(a=xya4, b=nf, out=xynf4);
-    And(a=xya5, b=nf, out=xynf5);
-    And(a=xya6, b=nf, out=xynf6);
-    And(a=xya7, b=nf, out=xynf7);
-    And(a=xya8, b=nf, out=xynf8);
-    And(a=xya9, b=nf, out=xynf9);
-    And(a=xya10, b=nf, out=xynf10);
-    And(a=xya11, b=nf, out=xynf11);
-    And(a=xya12, b=nf, out=xynf12);
-    And(a=xya13, b=nf, out=xynf13);
-    And(a=xya14, b=nf, out=xynf14);
-    And(a=xya15, b=nf, out=xynf15);
+    Not16(in=zzy, out=nzzy);
+    Mux16(a=zzy, b=nzzy, sel=ny, out=yval);
 
     // x + y if f = 1 else x & y
-    Or(a=xyf0, b=xynf0, out=fout0);
-    Or(a=xyf1, b=xynf1, out=fout1);
-    Or(a=xyf2, b=xynf2, out=fout2);
-    Or(a=xyf3, b=xynf3, out=fout3);
-    Or(a=xyf4, b=xynf4, out=fout4);
-    Or(a=xyf5, b=xynf5, out=fout5);
-    Or(a=xyf6, b=xynf6, out=fout6);
-    Or(a=xyf7, b=xynf7, out=fout7);
-    Or(a=xyf8, b=xynf8, out=fout8);
-    Or(a=xyf9, b=xynf9, out=fout9);
-    Or(a=xyf10, b=xynf10, out=fout10);
-    Or(a=xyf11, b=xynf11, out=fout11);
-    Or(a=xyf12, b=xynf12, out=fout12);
-    Or(a=xyf13, b=xynf13, out=fout13);
-    Or(a=xyf14, b=xynf14, out=fout14);
-    Or(a=xyf15, b=xynf15, out=fout15);
+    Add16(a=xval, b=yval, out=xyadd);
+    And16(a=xval, b=yval, out=xyand);
+    Mux16(a=xyand, b=xyadd, sel=f, out=xyval);
 
-    // !out if no = 1
-    Xor(a=fout0, b=no, out=out0);
-    Xor(a=fout1, b=no, out=out1);
-    Xor(a=fout2, b=no, out=out2);
-    Xor(a=fout3, b=no, out=out3);
-    Xor(a=fout4, b=no, out=out4);
-    Xor(a=fout5, b=no, out=out5);
-    Xor(a=fout6, b=no, out=out6);
-    Xor(a=fout7, b=no, out=out7);
-    Xor(a=fout8, b=no, out=out8);
-    Xor(a=fout9, b=no, out=out9);
-    Xor(a=fout10, b=no, out=out10);
-    Xor(a=fout11, b=no, out=out11);
-    Xor(a=fout12, b=no, out=out12);
-    Xor(a=fout13, b=no, out=out13);
-    Xor(a=fout14, b=no, out=out14);
-    Xor(a=fout15, b=no, out=out15);
+    Not16(in=xyval, out=nxyval);
+    Mux16(a=xyval, b=nxyval, sel=no, out=out1);
+    
+    Or16Way(in=out1, out=out2);
+    Not(in=out2, out=zr);
 
-    // calculate zr
-    Or(a=out0, b=out1, out=out01);
-    Or(a=out01, b=out2, out=out02);
-    Or(a=out02, b=out3, out=out03);
-    Or(a=out03, b=out4, out=out04);
-    Or(a=out04, b=out5, out=out05);
-    Or(a=out05, b=out6, out=out06);
-    Or(a=out06, b=out7, out=out07);
-    Or(a=out07, b=out8, out=out08);
-    Or(a=out08, b=out9, out=out09);
-    Or(a=out09, b=out10, out=out010);
-    Or(a=out010, b=out11, out=out011);
-    Or(a=out011, b=out12, out=out012);
-    Or(a=out012, b=out13, out=out013);
-    Or(a=out013, b=out14, out=out014);
-    Or(a=out014, b=out15, out=out015);
-    Not(in=out015, out=zr);
+    IsNeg16(in=out1, out=neg);
+    Mux(a=false, b=true, sel=neg, out=ng);
 
-    // calculate ng
-    And(a=out15, b=true, out=ng);
+    And16(a=out1, b=true, out=out);
 
-    // out
-    And(a=out0, b=true, out=out[0]);
-    And(a=out1, b=true, out=out[1]);
-    And(a=out2, b=true, out=out[2]);
-    And(a=out3, b=true, out=out[3]);
-    And(a=out4, b=true, out=out[4]);
-    And(a=out5, b=true, out=out[5]);
-    And(a=out6, b=true, out=out[6]);
-    And(a=out7, b=true, out=out[7]);
-    And(a=out8, b=true, out=out[8]);
-    And(a=out9, b=true, out=out[9]);
-    And(a=out10, b=true, out=out[10]);
-    And(a=out11, b=true, out=out[11]);
-    And(a=out12, b=true, out=out[12]);
-    And(a=out13, b=true, out=out[13]);
-    And(a=out14, b=true, out=out[14]);
-    And(a=out15, b=true, out=out[15]);
+
+    // Not(in=zx, out=nzx);
+    // Not(in=zy, out=nzy);
+    
+    // // x = 0 if zx = 1
+    // And(a=x[0], b=nzx, out=xz0);
+    // And(a=x[1], b=nzx, out=xz1);
+    // And(a=x[2], b=nzx, out=xz2);
+    // And(a=x[3], b=nzx, out=xz3);
+    // And(a=x[4], b=nzx, out=xz4);
+    // And(a=x[5], b=nzx, out=xz5);
+    // And(a=x[6], b=nzx, out=xz6);
+    // And(a=x[7], b=nzx, out=xz7);
+    // And(a=x[8], b=nzx, out=xz8);
+    // And(a=x[9], b=nzx, out=xz9);
+    // And(a=x[10], b=nzx, out=xz10);
+    // And(a=x[11], b=nzx, out=xz11);
+    // And(a=x[12], b=nzx, out=xz12);
+    // And(a=x[13], b=nzx, out=xz13);
+    // And(a=x[14], b=nzx, out=xz14);
+    // And(a=x[15], b=nzx, out=xz15);
+
+    // // y = 0 if zy = 1
+    // And(a=y[0], b=nzy, out=yz0);
+    // And(a=y[1], b=nzy, out=yz1);
+    // And(a=y[2], b=nzy, out=yz2);
+    // And(a=y[3], b=nzy, out=yz3);
+    // And(a=y[4], b=nzy, out=yz4);
+    // And(a=y[5], b=nzy, out=yz5);
+    // And(a=y[6], b=nzy, out=yz6);
+    // And(a=y[7], b=nzy, out=yz7);
+    // And(a=y[8], b=nzy, out=yz8);
+    // And(a=y[9], b=nzy, out=yz9);
+    // And(a=y[10], b=nzy, out=yz10);
+    // And(a=y[11], b=nzy, out=yz11);
+    // And(a=y[12], b=nzy, out=yz12);
+    // And(a=y[13], b=nzy, out=yz13);
+    // And(a=y[14], b=nzy, out=yz14);
+    // And(a=y[15], b=nzy, out=yz15);
+
+    // // !x if nz = 1
+    // Xor(a=xz0, b=nx, out=nnx0);
+    // Xor(a=xz1, b=nx, out=nnx1);
+    // Xor(a=xz2, b=nx, out=nnx2);
+    // Xor(a=xz3, b=nx, out=nnx3);
+    // Xor(a=xz4, b=nx, out=nnx4);
+    // Xor(a=xz5, b=nx, out=nnx5);
+    // Xor(a=xz6, b=nx, out=nnx6);
+    // Xor(a=xz7, b=nx, out=nnx7);
+    // Xor(a=xz8, b=nx, out=nnx8);
+    // Xor(a=xz9, b=nx, out=nnx9);
+    // Xor(a=xz10, b=nx, out=nnx10);
+    // Xor(a=xz11, b=nx, out=nnx11);
+    // Xor(a=xz12, b=nx, out=nnx12);
+    // Xor(a=xz13, b=nx, out=nnx13);
+    // Xor(a=xz14, b=nx, out=nnx14);
+    // Xor(a=xz15, b=nx, out=nnx15);
+
+    // // !y if ny = 1
+    // Xor(a=yz0, b=ny, out=nny0);
+    // Xor(a=yz1, b=ny, out=nny1);
+    // Xor(a=yz2, b=ny, out=nny2);
+    // Xor(a=yz3, b=ny, out=nny3);
+    // Xor(a=yz4, b=ny, out=nny4);
+    // Xor(a=yz5, b=ny, out=nny5);
+    // Xor(a=yz6, b=ny, out=nny6);
+    // Xor(a=yz7, b=ny, out=nny7);
+    // Xor(a=yz8, b=ny, out=nny8);
+    // Xor(a=yz9, b=ny, out=nny9);
+    // Xor(a=yz10, b=ny, out=nny10);
+    // Xor(a=yz11, b=ny, out=nny11);
+    // Xor(a=yz12, b=ny, out=nny12);
+    // Xor(a=yz13, b=ny, out=nny13);
+    // Xor(a=yz14, b=ny, out=nny14);
+    // Xor(a=yz15, b=ny, out=nny15);
+
+    // // x + y
+    // HalfAdder(a=nnx0, b=nny0, sum=xy0, carry=xyc0);
+    // FullAdder(a=nnx1, b=nny1, c=xyc0, sum=xy1, carry=xyc1);
+    // FullAdder(a=nnx2, b=nny2, c=xyc1, sum=xy2, carry=xyc2);
+    // FullAdder(a=nnx3, b=nny3, c=xyc2, sum=xy3, carry=xyc3);
+    // FullAdder(a=nnx4, b=nny4, c=xyc3, sum=xy4, carry=xyc4);
+    // FullAdder(a=nnx5, b=nny5, c=xyc4, sum=xy5, carry=xyc5);
+    // FullAdder(a=nnx6, b=nny6, c=xyc5, sum=xy6, carry=xyc6);
+    // FullAdder(a=nnx7, b=nny7, c=xyc6, sum=xy7, carry=xyc7);
+    // FullAdder(a=nnx8, b=nny8, c=xyc7, sum=xy8, carry=xyc8);
+    // FullAdder(a=nnx9, b=nny9, c=xyc8, sum=xy9, carry=xyc9);
+    // FullAdder(a=nnx10, b=nny10, c=xyc9, sum=xy10, carry=xyc10);
+    // FullAdder(a=nnx11, b=nny11, c=xyc10, sum=xy11, carry=xyc11);
+    // FullAdder(a=nnx12, b=nny12, c=xyc11, sum=xy12, carry=xyc12);
+    // FullAdder(a=nnx13, b=nny13, c=xyc12, sum=xy13, carry=xyc13);
+    // FullAdder(a=nnx14, b=nny14, c=xyc13, sum=xy14, carry=xyc14);
+    // FullAdder(a=nnx15, b=nny15, c=xyc14, sum=xy15, carry=xyc15);
+
+    // // x & y
+    // And(a=nnx0, b=nny0, out=xya0);
+    // And(a=nnx1, b=nny1, out=xya1);
+    // And(a=nnx2, b=nny2, out=xya2);
+    // And(a=nnx3, b=nny3, out=xya3);
+    // And(a=nnx4, b=nny4, out=xya4);
+    // And(a=nnx5, b=nny5, out=xya5);
+    // And(a=nnx6, b=nny6, out=xya6);
+    // And(a=nnx7, b=nny7, out=xya7);
+    // And(a=nnx8, b=nny8, out=xya8);
+    // And(a=nnx9, b=nny9, out=xya9);
+    // And(a=nnx10, b=nny10, out=xya10);
+    // And(a=nnx11, b=nny11, out=xya11);
+    // And(a=nnx12, b=nny12, out=xya12);
+    // And(a=nnx13, b=nny13, out=xya13);
+    // And(a=nnx14, b=nny14, out=xya14);
+    // And(a=nnx15, b=nny15, out=xya15);
+
+    // Not(in=f, out=nf);
+
+    // // x + y if f = 1
+    // And(a=xy0, b=f, out=xyf0);
+    // And(a=xy1, b=f, out=xyf1);
+    // And(a=xy2, b=f, out=xyf2);
+    // And(a=xy3, b=f, out=xyf3);
+    // And(a=xy4, b=f, out=xyf4);
+    // And(a=xy5, b=f, out=xyf5);
+    // And(a=xy6, b=f, out=xyf6);
+    // And(a=xy7, b=f, out=xyf7);
+    // And(a=xy8, b=f, out=xyf8);
+    // And(a=xy9, b=f, out=xyf9);
+    // And(a=xy10, b=f, out=xyf10);
+    // And(a=xy11, b=f, out=xyf11);
+    // And(a=xy12, b=f, out=xyf12);
+    // And(a=xy13, b=f, out=xyf13);
+    // And(a=xy14, b=f, out=xyf14);
+    // And(a=xy15, b=f, out=xyf15);
+
+    // // x & y if f = 0
+    // And(a=xya0, b=nf, out=xynf0);
+    // And(a=xya1, b=nf, out=xynf1);
+    // And(a=xya2, b=nf, out=xynf2);
+    // And(a=xya3, b=nf, out=xynf3);
+    // And(a=xya4, b=nf, out=xynf4);
+    // And(a=xya5, b=nf, out=xynf5);
+    // And(a=xya6, b=nf, out=xynf6);
+    // And(a=xya7, b=nf, out=xynf7);
+    // And(a=xya8, b=nf, out=xynf8);
+    // And(a=xya9, b=nf, out=xynf9);
+    // And(a=xya10, b=nf, out=xynf10);
+    // And(a=xya11, b=nf, out=xynf11);
+    // And(a=xya12, b=nf, out=xynf12);
+    // And(a=xya13, b=nf, out=xynf13);
+    // And(a=xya14, b=nf, out=xynf14);
+    // And(a=xya15, b=nf, out=xynf15);
+
+    // // x + y if f = 1 else x & y
+    // Or(a=xyf0, b=xynf0, out=fout0);
+    // Or(a=xyf1, b=xynf1, out=fout1);
+    // Or(a=xyf2, b=xynf2, out=fout2);
+    // Or(a=xyf3, b=xynf3, out=fout3);
+    // Or(a=xyf4, b=xynf4, out=fout4);
+    // Or(a=xyf5, b=xynf5, out=fout5);
+    // Or(a=xyf6, b=xynf6, out=fout6);
+    // Or(a=xyf7, b=xynf7, out=fout7);
+    // Or(a=xyf8, b=xynf8, out=fout8);
+    // Or(a=xyf9, b=xynf9, out=fout9);
+    // Or(a=xyf10, b=xynf10, out=fout10);
+    // Or(a=xyf11, b=xynf11, out=fout11);
+    // Or(a=xyf12, b=xynf12, out=fout12);
+    // Or(a=xyf13, b=xynf13, out=fout13);
+    // Or(a=xyf14, b=xynf14, out=fout14);
+    // Or(a=xyf15, b=xynf15, out=fout15);
+
+    // // !out if no = 1
+    // Xor(a=fout0, b=no, out=out0);
+    // Xor(a=fout1, b=no, out=out1);
+    // Xor(a=fout2, b=no, out=out2);
+    // Xor(a=fout3, b=no, out=out3);
+    // Xor(a=fout4, b=no, out=out4);
+    // Xor(a=fout5, b=no, out=out5);
+    // Xor(a=fout6, b=no, out=out6);
+    // Xor(a=fout7, b=no, out=out7);
+    // Xor(a=fout8, b=no, out=out8);
+    // Xor(a=fout9, b=no, out=out9);
+    // Xor(a=fout10, b=no, out=out10);
+    // Xor(a=fout11, b=no, out=out11);
+    // Xor(a=fout12, b=no, out=out12);
+    // Xor(a=fout13, b=no, out=out13);
+    // Xor(a=fout14, b=no, out=out14);
+    // Xor(a=fout15, b=no, out=out15);
+
+    // // calculate zr
+    // Or(a=out0, b=out1, out=out01);
+    // Or(a=out01, b=out2, out=out02);
+    // Or(a=out02, b=out3, out=out03);
+    // Or(a=out03, b=out4, out=out04);
+    // Or(a=out04, b=out5, out=out05);
+    // Or(a=out05, b=out6, out=out06);
+    // Or(a=out06, b=out7, out=out07);
+    // Or(a=out07, b=out8, out=out08);
+    // Or(a=out08, b=out9, out=out09);
+    // Or(a=out09, b=out10, out=out010);
+    // Or(a=out010, b=out11, out=out011);
+    // Or(a=out011, b=out12, out=out012);
+    // Or(a=out012, b=out13, out=out013);
+    // Or(a=out013, b=out14, out=out014);
+    // Or(a=out014, b=out15, out=out015);
+    // Not(in=out015, out=zr);
+
+    // // calculate ng
+    // And(a=out15, b=true, out=ng);
+
+    // // out
+    // And(a=out0, b=true, out=out[0]);
+    // And(a=out1, b=true, out=out[1]);
+    // And(a=out2, b=true, out=out[2]);
+    // And(a=out3, b=true, out=out[3]);
+    // And(a=out4, b=true, out=out[4]);
+    // And(a=out5, b=true, out=out[5]);
+    // And(a=out6, b=true, out=out[6]);
+    // And(a=out7, b=true, out=out[7]);
+    // And(a=out8, b=true, out=out[8]);
+    // And(a=out9, b=true, out=out[9]);
+    // And(a=out10, b=true, out=out[10]);
+    // And(a=out11, b=true, out=out[11]);
+    // And(a=out12, b=true, out=out[12]);
+    // And(a=out13, b=true, out=out[13]);
+    // And(a=out14, b=true, out=out[14]);
+    // And(a=out15, b=true, out=out[15]);
 }
